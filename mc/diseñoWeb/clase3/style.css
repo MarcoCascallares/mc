@@ -1,0 +1,87 @@
+*{
+
+    font-family: 'Times New Roman', Times, serif;
+
+    background-color: rgb(255, 255, 255);
+
+}
+
+
+
+#formulario{
+
+    display: flex;
+
+    flex-direction: column;
+
+    border: 1px solid gray;
+
+    width: 260px;
+
+    height: 205px;
+
+    margin: 5px;
+
+    background-color: #3f37ad;
+
+}
+
+
+
+#formulario label{
+
+    background-color: #2f00ff;
+
+    color: aliceblue    ;
+
+}
+
+
+
+.iText{
+
+    background-color: whitesmoke;
+
+}
+
+
+
+#botones{
+
+    background-color: rgb(255, 255, 255);
+
+    font-size: larger;
+
+}
+
+
+
+#btnSubmit, #btnMostrar{
+
+    margin-top: 25px;
+
+    width: 90px;
+
+    height: 30px;
+
+}
+
+
+
+#containerPrincipal{
+
+    display: flex;
+
+    flex-direction: row;
+
+}
+
+
+
+#displayTodos, #displayTodos p, #displayTodos strong, #displayTodos h3{
+
+    background-color: #ff0000;
+
+    margin: 5px;
+
+}
