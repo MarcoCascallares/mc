@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Aplicación de Toma de Pedidos</h1>
+    
+    <h2>Tomar un nuevo pedido</h2>
+    <form id="pedido-form">
+        <label for="cliente">Cliente:</label>
+        <input type="text" id="cliente" required><br>
+        
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" required><br>
+        
+        <label for="hamburguesas">Hamburguesas:</label>
+        <select id="hamburguesas" multiple required>
+            <option value="Bella Burger">Bella Burger</option>
+            <option value="Bella Doble">Bella Doble</option>
+            <option value="Bella Pollo">Bella Pollo</option>
+            <option value="Super Bella">Super Bella</option>
+            <option value="Bella Vegan">Bella Vegan</option>
+        </select><br>
+        
+        <button type="submit">Tomar Pedido</button>
+    </form>
+    
+    <h2>Pedidos Pendientes</h2>
+    <ul id="pedidos-list">
+        <!-- Lista de pedidos generada dinámicamente en JavaScript -->
+    </ul>
+    
+    <h2>Registros</h2>
+    <button id="limpiar-registros">Limpiar Registros</button>
+    
+    
+</body>
+</html>
