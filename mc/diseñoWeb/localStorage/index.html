@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realizar Pedido</title>
+    <style>
+        /* Estilo general del cuerpo de la página */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .container {
+            margin-right: 30vw;
+            margin-left: 30vw;
+        }
+
+        /* Encabezado principal */
+        h1 {
+            color: #333;
+            background-color: #ffcc00;
+            padding: 10px;
+            margin: 0;
+        }
+
+        /* Etiquetas y campos de entrada */
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Botones */
+        button {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff9900;
+        }
+
+        /* Listas de pedidos pendientes y entregados */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: #fff;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Botones en las listas de pedidos */
+        li button {
+            background-color: #ff3333;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        li button:hover {
+            background-color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Realizar Pedido</h1>
+
+        <label for="cliente">Cliente:</label>
+        <input type="text" id="cliente" placeholder="Nombre del cliente">
+        <br>
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" placeholder="Dirección de entrega">
+        <br>
+        <label for="pedido">Pedido:</label>
+        <select id="pedido">
+            <option value="Bella Burger">Bella Burger</option>
+            <option value="Doble Burger">Doble Burger</option>
+            <option value="Pollo Bella">Pollo Bella</option>
+            <option value="Super Bella">Super Bella</option>
+            <option value="Vegan Burger">Vegan Burger</option>
+        </select>
+
+        <button id="agregarPedido">Agregar Pedido</button>
+        <button id="limpiarRegistros">Limpiar Registros</button>
+
+        <h2>Pedidos Pendientes</h2>
+        <ul id="pedidosPendientes"></ul>
+
+        <h2>Pedidos Entregados</h2>
+        <ul id="pedidosEntregados"></ul>
+
+        <script>
+            // Variables globales para las listas de pedidos
+            const pedidosPendientesList = document.getElementById('pedidosPendientes');
+            const pedidosEntregadosList = document.getElementById('pedidosEntregados');
+            
+            // Inicialización de las listas de pedidos desde el almacenamiento local
+            let pedidosPendientes = JSON.parse(localStorage.getItem('pedidosPendientes')) || [];
+            let pedidosEntregados = JSON.parse(localStorage.getItem('pedidosEntregados')) || [];
+
+            // Función para actualizar las listas de pedidos
+            function actualizarListas() {
+                pedidosPendientesList.innerHTML = '';
+                pedidosEntregadosList.innerHTML = '';
+
+                for (const pedido of pedidosPendientes) {
+                    const li = document.createElement('li');
+                    li.textContent = `${pedido.cliente} - ${pedido.pedido} - ${pedido.direccion}`;
+                    const btnEliminar = crearBotonEliminar(pedido, 'Pendiente');
+                    const btnCambiarEstado = crearBotonCambiarEstado(pedido, 'Pendiente');
+                    li.appendChild(btnEliminar);
+                    li.appendChild(btnCambiarEstado);
+                    pedidosPendientesList.appendChild(li);
+                }
+
+                for (const pedido of pedidosEntregados) {
+                    const li = document.createElement('li');
+                    li.textContent = `${pedido.cliente} | ${pedido.direccion} | ${pedido.pedido}`;
+                    const btnEliminar = crearBotonEliminar(pedido, 'Entregado');
+                    const btnCambiarEstado = crearBotonCambiarEstado(pedido, 'Entregado');
+                    li.appendChild(btnEliminar);
+                    li.appendChild(btnCambiarEstado);
+                    pedidosEntregadosList.appendChild(li);
+                }
+            }
+
+            // Función para agregar un nuevo pedido
+            function agregarPedido() {
+                const cliente = document.getElementById('cliente').value;
+                const direccion = document.getElementById('direccion').value;
+                const pedido = document.getElementById('pedido').value;
+
+                if (cliente && direccion && pedido) {
+                    const nuevoPedido = { cliente, direccion, pedido, estado: 'Pendiente' };
+                    pedidosPendientes.push(nuevoPedido);
+                    actualizarListas();
+
+                    document.getElementById('cliente').value = '';
+                    document.getElementById('direccion').value = '';
+                    document.getElementById('pedido').value = '';
+
+                    // Actualiza el almacenamiento local con los nuevos datos
+                    localStorage.setItem('pedidosPendientes', JSON.stringify(pedidosPendientes));
+                }
+            }
+
+            // Función para crear un botón de eliminar pedido
+            function crearBotonEliminar(pedido, estado) {
+                const btnEliminar = document.createElement('button');
+                btnEliminar.textContent = 'Eliminar Pedido';
+                btnEliminar.addEventListener('click', () => {
+                    const lista = estado === 'Pendiente' ? pedidosPendientes : pedidosEntregados;
+                    const index = lista.indexOf(pedido);
+                    if (index > -1) {
+                        lista.splice(index, 1);
+                        actualizarListas();
+
+                        // Actualiza el almacenamiento local después de eliminar
+                        localStorage.setItem('pedidosPendientes', JSON.stringify(pedidosPendientes));
+                        localStorage.setItem('pedidosEntregados', JSON.stringify(pedidosEntregados));
+                    }
+                });
+                return btnEliminar;
+            }
+
+            // Función para crear un botón de cambiar estado del pedido
+            function crearBotonCambiarEstado(pedido, estado) {
+                const btnCambiarEstado = document.createElement('button');
+                btnCambiarEstado.textContent = 'Cambiar Estado';
+                btnCambiarEstado.addEventListener('click', () => {
+                    if (estado === 'Pendiente') {
+                        const index = pedidosPendientes.indexOf(pedido);
+                        if (index > -1) {
+                            pedido.estado = 'Entregado';
+                            pedidosEntregados.push(pedido);
+                            pedidosPendientes.splice(index, 1);
+                            actualizarListas();
+
+                            // Actualiza el almacenamiento local después de cambiar el estado
+                            localStorage.setItem('pedidosPendientes', JSON.stringify(pedidosPendientes));
+                            localStorage.setItem('pedidosEntregados', JSON.stringify(pedidosEntregados));
+                        }
+                    } else if (estado === 'Entregado') {
+                        const index = pedidosEntregados.indexOf(pedido);
+                        if (index > -1) {
+                            pedido.estado = 'Pendiente';
+                            pedidosPendientes.push(pedido);
+                            pedidosEntregados.splice(index, 1);
+                            actualizarListas();
+
+                            // Actualiza el almacenamiento local después de cambiar el estado
+                            localStorage.setItem('pedidosPendientes', JSON.stringify(pedidosPendientes));
+                            localStorage.setItem('pedidosEntregados', JSON.stringify(pedidosEntregados));
+                        }
+                    }
+                });
+                return btnCambiarEstado;
+            }
+
+            // Obtención de elementos y asignación de eventos
+            const agregarPedidoBtn = document.getElementById('agregarPedido');
+            agregarPedidoBtn.addEventListener('click', agregarPedido);
+
+            const limpiarRegistrosBtn = document.getElementById('limpiarRegistros');
+            limpiarRegistrosBtn.addEventListener('click', () => {
+                // Elimina los datos de almacenamiento local y reinicializa las listas
+                localStorage.removeItem('pedidosPendientes');
+                localStorage.removeItem('pedidosEntregados');
+                pedidosPendientes = [];
+                pedidosEntregados = [];
+                actualizarListas();
+            });
+
+            // Inicializa las listas al cargar la página
+            actualizarListas();
+        </script>
+    </div>
+</body>
+</html>

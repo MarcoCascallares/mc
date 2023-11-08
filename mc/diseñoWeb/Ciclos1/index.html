@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Productos</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h1>Selecciona tus productos</h1>
+
+    <!-- Formulario para ingresar números -->
+    <form>
+        <input type="number" id="numero" placeholder="Ingresa un número">
+        <button type="button" onclick="solicitarNumero()">Aceptar</button>
+    </form>
+
+    <!-- Contenedor para mostrar los productos seleccionados -->
+    <div id="resultados">
+        <h2>Productos seleccionados:</h2>
+        <ul id="listaProductos"></ul> <!-- Lista donde se agregarán los productos -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
